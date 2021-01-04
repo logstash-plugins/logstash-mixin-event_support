@@ -1,6 +1,6 @@
 # Event Support Mixin
 
-[![Build Status](https://travis-ci.org/logstash-plugins/logstash-mixin-event_support.svg?branch=master)](https://travis-ci.org/logstash-plugins/logstash-mixin-event_support)
+[![Build Status](https://travis-ci.com/logstash-plugins/logstash-mixin-event_support.svg?branch=master)](https://travis-ci.com/logstash-plugins/logstash-mixin-event_support)
 
 
 ## Usage
