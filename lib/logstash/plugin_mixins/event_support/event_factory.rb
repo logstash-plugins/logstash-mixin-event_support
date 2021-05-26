@@ -13,14 +13,14 @@ module LogStash; module PluginMixins; module EventSupport
     end
 
     def normalize(event, data = nil)
-      return if event.include?('event.created')
+      return if event.include?('[event][created]')
 
       if data.nil? || data['@timestamp']
         created = LogStash::Timestamp.now
       else
         created = event.timestamp
       end
-      event.set('event.created', created)
+      event.set('[event][created]', created)
     end
 
   end
