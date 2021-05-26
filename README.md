@@ -26,7 +26,7 @@
       include LogStash::PluginMixins::EventSupport::EventFactoryAdapter
    
       # an optional mixin to provide `events_from_json` using the factory :
-      #include LogStash::PluginMixins::EventSupport::FromJsonAdapter
+      #include LogStash::PluginMixins::EventSupport::FromJsonHelper
 
       def register
         event_factory_builder.with_target(@target).build

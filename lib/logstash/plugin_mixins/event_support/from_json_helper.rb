@@ -9,7 +9,7 @@ require 'logstash/event'
 module LogStash
   module PluginMixins
     module EventSupport
-      module FromJsonAdapter
+      module FromJsonHelper
 
         def self.included(base)
           if defined? LogStash::Plugins::EventFactorySupport # native support from LS core
@@ -32,7 +32,7 @@ module LogStash
         module FallbackImpl
 
           def events_from_json(json, event_factory = self.event_factory)
-            decoded = LogStash::JSON.load(json)
+            decoded = LogStash::Json.load(json)
             case decoded
             when Array then
               begin
