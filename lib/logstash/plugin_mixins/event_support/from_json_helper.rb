@@ -34,12 +34,7 @@ module LogStash
           def events_from_json(json, event_factory = self.event_factory)
             decoded = LogStash::Json.load(json)
             case decoded
-            when Array then
-              begin
-                decoded.map { |data| event_factory.new_event(data) }
-              rescue => e
-                raise LogStash::Json::ParserError.new("Unexpected JSON type in array (#{e.message})")
-              end
+            when Array then decoded.map { |data| event_factory.new_event(data) }
             when Hash  then [ event_factory.new_event(decoded) ]
             else raise LogStash::Json::ParserError.new("JSON must contain array or hash, got #{decoded.class}")
             end
