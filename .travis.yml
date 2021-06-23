@@ -5,5 +5,3 @@ import:
 env:
   jobs:
     - ELASTIC_STACK_VERSION=7.13.1 # EventFactorySupport N/A
-    - ELASTIC_STACK_VERSION=7.x
-    - SNAPSHOT=true ELASTIC_STACK_VERSION=8.0.0-SNAPSHOT

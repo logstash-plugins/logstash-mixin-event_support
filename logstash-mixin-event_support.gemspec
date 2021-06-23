@@ -12,9 +12,9 @@ Gem::Specification.new do |s|
 
   s.test_files = s.files.grep(%r{^(test|spec|features)/})
 
-  s.platform = RUBY_PLATFORM
+  s.platform = 'java'
 
-  s.add_runtime_dependency 'logstash-core', '>= 7.0'
+  s.add_runtime_dependency 'logstash-core', '>= 6.8'
 
   s.add_development_dependency 'logstash-devutils'
   s.add_development_dependency 'logstash-codec-plain'
