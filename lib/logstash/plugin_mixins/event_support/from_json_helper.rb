@@ -22,7 +22,7 @@ module LogStash
 
         module NativeImpl
 
-          def events_from_json(json, event_factory = self.event_factory)
+          def events_from_json(json, event_factory)
             LogStash::Event.from_json(json) { |data| event_factory.new_event(data) }
           end
 
@@ -31,7 +31,7 @@ module LogStash
 
         module FallbackImpl
 
-          def events_from_json(json, event_factory = self.event_factory)
+          def events_from_json(json, event_factory)
             decoded = LogStash::Json.load(json)
             case decoded
             when Array then decoded.map { |data| event_factory.new_event(data) }
