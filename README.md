@@ -27,13 +27,9 @@
    
       # an optional mixin to provide `events_from_json` using the factory :
       #include LogStash::PluginMixins::EventSupport::FromJsonHelper
-
-      def register
-        event_factory_builder.with_target(@target).build
-      end
    
       def decode(data, &block)
-        paylaod = extract_bar(data) # ...
+        payload = extract_bar(data) # ...
         yield event_factory.new_event(payload)
       end
    
