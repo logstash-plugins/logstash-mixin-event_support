@@ -1,65 +1,62 @@
 # encoding: utf-8
+require 'jruby'
 
 module LogStash::PluginMixins::EventSupport::EventFactoryAdapter::FallbackImpl
 
+  # The event_factory method is effectively final and should not be re-defined by plugins.
+  #
+  # @return an event factory object with a `new_event(Hash)` API
   def event_factory
-    @event_factory ||= default_event_factory
-  end
-  attr_writer :event_factory
-
-  def default_event_factory
-    DefaultEventFactory::INSTANCE
-  end
-
-  def event_factory_builder
-    Builder.new self, default_event_factory
-  end
-
-  class Builder
-
-    def initialize(plugin, factory)
-      @plugin = plugin
-      @factory = factory
+    @_event_factory || JRuby.reference(self).synchronized do
+      @_event_factory ||= create_event_factory
     end
-
-    # @return an event factory
-    def build
-      @plugin.event_factory = @factory
-    end
-
-    # @return [Builder] self
-    def with_target(target)
-      unless target.nil?
-        @factory = TargetedEventFactory.new(@factory, target)
-      end
-      self
-    end
-
   end
 
-  class DefaultEventFactory
+  # The `targeted_event_factory` method is effectively final and should not be re-defined.
+  # If the plugin defines a `target => ...` option than this method will return a factory
+  # that respects the set target, otherwise (no target) returns {#event_factory}.
+  #
+  # @return an event factory object with a `new_event(Hash)` API
+  def targeted_event_factory
+    @_targeted_event_factory ||= begin # not synchronized - fine to initialize twice
+                                   raise ArgumentError.new('config(:target) not present') unless respond_to?(:target)
+                                   target.nil? ? event_factory : TargetedEventFactory.new(event_factory, target)
+                                 end
+  end
+
+  private
+
+  # @api private
+  # @since LS 7.14
+  def create_event_factory
+    BasicEventFactory::INSTANCE
+  end
+
+  class BasicEventFactory
     INSTANCE = new
 
     # @param payload [Hash]
     # @return [LogStash::Event]
-    def new_event(payload)
+    def new_event(payload = {})
       LogStash::Event.new(payload)
     end
 
   end
-  private_constant :DefaultEventFactory
+  private_constant :BasicEventFactory
 
   class TargetedEventFactory
 
     def initialize(inner, target)
       @delegate = inner
-      @target = target
+      @target = target # TODO validate
     end
 
     # @param payload [Hash]
     # @return [LogStash::Event]
-    def new_event(payload)
-      @delegate.new_event(@target => payload)
+    def new_event(payload = {})
+      event = @delegate.new_event
+      event.set(@target, payload)
+      event
     end
 
   end

@@ -15,6 +15,7 @@ module LogStash
         # @param base [Class]: a class that inherits `LogStash::Plugin`, typically one
         #                      descending from one of the four plugin base classes
         #                      (e.g., `LogStash::Inputs::Base`)
+        # @raise [ArgumentError]
         # @return [void]
         def self.included(base)
           fail(ArgumentError, "`#{base}` must inherit LogStash::Plugin") unless base < LogStash::Plugin
