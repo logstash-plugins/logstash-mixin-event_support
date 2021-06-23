@@ -58,6 +58,10 @@ describe LogStash::PluginMixins::EventSupport::FromJsonHelper do
         it 'raises on invalid json' do
           expect { plugin.events_from_json('{ "" }', event_factory) }.to raise_error(LogStash::Json::ParserError)
         end
+        
+        it 'raises on incomplete json' do
+          expect { plugin.events_from_json('{"answer":"42"', event_factory) }.to raise_error(LogStash::Json::ParserError)
+        end
 
       end
 
