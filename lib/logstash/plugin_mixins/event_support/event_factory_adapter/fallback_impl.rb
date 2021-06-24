@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'jruby'
 
 module LogStash::PluginMixins::EventSupport::EventFactoryAdapter::FallbackImpl
 
@@ -7,9 +6,7 @@ module LogStash::PluginMixins::EventSupport::EventFactoryAdapter::FallbackImpl
   #
   # @return an event factory object with a `new_event(Hash)` API
   def event_factory
-    @_event_factory || JRuby.reference(self).synchronized do
-      @_event_factory ||= create_event_factory
-    end
+    @_event_factory ||= BasicEventFactory::INSTANCE
   end
 
   # The `targeted_event_factory` method is effectively final and should not be re-defined.
@@ -25,12 +22,6 @@ module LogStash::PluginMixins::EventSupport::EventFactoryAdapter::FallbackImpl
   end
 
   private
-
-  # @api private
-  # @since LS 7.14
-  def create_event_factory
-    BasicEventFactory::INSTANCE
-  end
 
   class BasicEventFactory
     INSTANCE = new
