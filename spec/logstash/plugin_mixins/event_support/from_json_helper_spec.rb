@@ -51,7 +51,7 @@ describe LogStash::PluginMixins::EventSupport::FromJsonHelper do
           expect( events[1].get('[test]') ).to eql 'baz' => 42.0
         end
 
-        it 'raises on unexpecred json' do
+        it 'raises on unexpected json' do
           expect { plugin.events_from_json(' "42" ', event_factory) }.to raise_error(LogStash::Json::ParserError)
         end
 
