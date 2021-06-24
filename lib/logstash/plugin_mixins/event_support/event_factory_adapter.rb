@@ -24,7 +24,7 @@ module LogStash
             core_event_support = LogStash::Plugins::EventFactorySupport
             fail(ArgumentError, "`#{base}` should include #{core_event_support}") unless base < core_event_support
           else
-            require 'logstash/plugin_mixins/event_support/event_factory_adapter/fallback_impl'
+            require_relative 'event_factory_adapter/fallback_impl'
             base.send(:include, FallbackImpl)
             private_constant :FallbackImpl
           end
