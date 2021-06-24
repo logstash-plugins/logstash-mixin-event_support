@@ -123,7 +123,7 @@ describe LogStash::PluginMixins::EventSupport::EventFactoryAdapter do
                 expect( event_factory ).to be plugin.send(:targeted_event_factory)
               end
 
-              it 'uses a different factory fro the basic one' do
+              it 'uses a different factory from the basic one' do
                 expect( event_factory ).not_to be plugin.send(:event_factory)
               end
 
