@@ -96,16 +96,18 @@ describe LogStash::PluginMixins::EventSupport::EventFactoryAdapter do
               end
             end
 
-            subject(:event_factory) { plugin.send(:targeted_event_factory) }
+            subject(:targeted_event_factory) { plugin.send(:targeted_event_factory) }
 
-            it_behaves_like 'an event factory'
+            it_behaves_like 'an event factory' do
+              subject(:event_factory) { targeted_event_factory }
+            end
 
             it 'memoizes the factory instance' do
-              expect( event_factory ).to be plugin.send(:targeted_event_factory)
+              expect( targeted_event_factory ).to be plugin.send(:targeted_event_factory)
             end
 
             it 'uses the basic event factory (no target specified)' do
-              expect( event_factory ).to be plugin.send(:event_factory)
+              expect( targeted_event_factory ).to be plugin.send(:event_factory)
             end
 
             context 'with target' do
@@ -113,18 +115,18 @@ describe LogStash::PluginMixins::EventSupport::EventFactoryAdapter do
               let(:options) { super().merge('target' => '[the][baz]') }
 
               it 'returns an event' do
-                expect( event_factory.new_event ).to be_a LogStash::Event
-                expect( event = event_factory.new_event('foo' => 'bar') ).to be_a LogStash::Event
+                expect( targeted_event_factory.new_event ).to be_a LogStash::Event
+                expect( event = targeted_event_factory.new_event('foo' => 'bar') ).to be_a LogStash::Event
                 expect( event.include?('foo') ).to be false
                 expect( event.get('[the][baz][foo]') ).to eql 'bar'
               end
 
               it 'memoizes the factory instance' do
-                expect( event_factory ).to be plugin.send(:targeted_event_factory)
+                expect( targeted_event_factory ).to be plugin.send(:targeted_event_factory)
               end
 
               it 'uses a different factory from the basic one' do
-                expect( event_factory ).not_to be plugin.send(:event_factory)
+                expect( targeted_event_factory ).not_to be plugin.send(:event_factory)
               end
 
             end
