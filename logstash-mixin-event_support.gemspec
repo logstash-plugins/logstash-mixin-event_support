@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'logstash-mixin-event_support'
-  s.version       = '1.0.0'
+  s.version       = '1.0.1'
   s.licenses      = %w(Apache-2.0)
   s.summary       = "Event support for Logstash plugins"
   s.authors       = %w(Elastic)
