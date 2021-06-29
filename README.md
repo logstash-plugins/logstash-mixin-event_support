@@ -19,13 +19,22 @@
    that already inherits `LogStash::Plugin`:
 
     ~~~ ruby
-    require 'logstash/plugin_mixins/event_support'
+    require 'logstash/plugin_mixins/event_support/event_factory_adapter'
 
-    class LogStash::Inputs::Foo < Logstash::Inputs::Base
+    class LogStash::Codecs::Bar < Logstash::Codecs::Base
 
-      include LogStash::PluginMixins::EventSupport
-
-      # ...
+      include LogStash::PluginMixins::EventSupport::EventFactoryAdapter
+   
+      # an optional mixin to provide `events_from_json` using the factory :
+      #include LogStash::PluginMixins::EventSupport::FromJsonHelper
+   
+      def decode(data, &block)
+        payload = extract_bar(data) # ...
+        yield event_factory.new_event(payload)
+      end
+   
+      # def extract_bar(data) ...
+   
     end
     ~~~
 
