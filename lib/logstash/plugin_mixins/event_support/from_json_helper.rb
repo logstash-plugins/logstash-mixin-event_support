@@ -36,6 +36,7 @@ module LogStash
             case decoded
             when Array then decoded.map { |data| event_factory.new_event(data) }
             when Hash  then [ event_factory.new_event(decoded) ]
+            when nil   then [] # same behavior as Event.from_json("")
             else raise LogStash::Json::ParserError.new("JSON must contain array or hash, got #{decoded.class}")
             end
           end
